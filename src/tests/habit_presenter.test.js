@@ -90,7 +90,18 @@ describe('HabitPresenter', () => {
   it('adds new habit to the list', () => {
     presenter.add('Eating', update)
 
-    expect(presenter.getHabits()[2].name) // 새로 추가되었으니까 두번째 인덱스에 있는 habit의 이름이
+    expect(presenter.getHabits()[2].name).toBe('Studying') // 새로 추가되었으니까 두번째 인덱스에 있는 habit의 이름이 'Studying'
+    expect(presenter.getHabits()[2].count).toBe(0) // count 0으로 초기화
+
+    checkUpdateIsCalled() //그리고 항상 업데이트 호출되어있는지 확인해주어야함
+  })
+
+  it('resets all habit counts to 0', () => {
+    presenter.reset(update)
+
+    expect(presenter.getHabits()[0].count).toBe(0)
+    expect(presenter.getHabits()[1].count).toBe(0)
+    checkUpdateIsCalled()
   })
 
   //업데이트 함수가 호출되었는지 체크하는 함수 .반복적으로 들어가니까 묶어서 할당해줄거임
