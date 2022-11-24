@@ -16,7 +16,7 @@ describe('HabitPresenter', () => {
     //항상 시작하는 초기값이 있어야하므로 여기서 배열을 만들면 되는데,
     //여기에다가 바로 배열을 만들면 되지만 나중에 이 배열에 대해서 테스트 하고 할때
     //이 배열에 접근을 해야하므로 외부에다가 정의해줘야함. const habits =[] ....
-    presenter = new HabitPresenter(habits)
+    presenter = new HabitPresenter(habits, 3)
     update = jest.fn() //update는 jest에서 제공하는 목함수를 이용하면됨
   })
 
@@ -88,12 +88,39 @@ describe('HabitPresenter', () => {
 
   //뉴 해빗 추가
   it('adds new habit to the list', () => {
-    presenter.add('Eating', update)
+    presenter.add('Studying', update)
 
     expect(presenter.getHabits()[2].name).toBe('Studying') // 새로 추가되었으니까 두번째 인덱스에 있는 habit의 이름이 'Studying'
     expect(presenter.getHabits()[2].count).toBe(0) // count 0으로 초기화
 
     checkUpdateIsCalled() //그리고 항상 업데이트 호출되어있는지 확인해주어야함
+  })
+
+  it('throws an error when the max habits limit is exceeded', () => {
+    presenter.add('Studying', update)
+    expect(() => {
+      presenter
+        .add('Studying', update)
+        .toThrow('습관의 갯수는 3 이상이 될 수 없습니다')
+    })
+  })
+
+  describe('reset', () => {
+    it('set all habit counts to 0', () => {
+      presenter.reset(update)
+      expect(presenter.getHabits()[0].count).toBe(0)
+      expect(presenter.getHabits()[1].count).toBe(0)
+
+      checkUpdateIsCalled()
+    })
+
+    it('does not create new object when count is 0', () => {
+      const habits = presenter.getHabits()
+      presenter.reset(update)
+      const updatedHabits = presenter.getHabits()
+
+      expect(updatedHabits[1]).toEqual(habits[1])
+    })
   })
 
   it('resets all habit counts to 0', () => {

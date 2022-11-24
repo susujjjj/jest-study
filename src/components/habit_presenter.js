@@ -1,9 +1,11 @@
 //UI를 위한 UI에서 처리하는 로직들을 담고있음
 export default class HabitPresenter {
   //constructor에서 초기값을 받을수있어요
-  constructor(habits) {
+  constructor(habits, maxHabits) {
+    //외부에서 받아오면 재사용성도 높고 설정해서 쓸 수 있어서 산편, 테스트성도 올릴수있음
     //처음 habit을 받아와서 이 habit부터 시작하기
     this.habits = habits
+    this.maxHabits = maxHabits
   }
 
   //그러면 getHabits이라는 함수를 통해서
@@ -46,6 +48,13 @@ export default class HabitPresenter {
   }
 
   add(name, update) {
+    //지금 가지고 있는 habit의 갯수가 우리가 추가할 수 있는. 예를들어 maxHabits이라는 이 갯수랑 똑같다면, 더이상 추가가 안되게 만들고 싶어요
+    //그러면 add라는 함수 안에서 지금 가지고 있는 습관의 갯수와 우리가 총 가질수 있는 갯수가 똑같다면,
+    //더이상 새로운걸 추가하면 안되겠죠?
+    //그래서 error를 던진다고 가정해보자.
+    if (this.habits.length === this.maxHabits) {
+      throw new Error(`습관의 갯수는 ${this.maxHabits} 이상이 될 수 없습니다`)
+    }
     this.habits = [...this.habits, { id: Date.now(), name, count: 0 }]
     update(this.habits)
   }
