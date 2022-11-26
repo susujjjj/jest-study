@@ -119,7 +119,11 @@ describe('HabitPresenter', () => {
       presenter.reset(update)
       const updatedHabits = presenter.getHabits()
 
-      expect(updatedHabits[1]).toEqual(habits[1])
+      expect(updatedHabits[1]).toBe(habits[1])
+      //toEqual은 object안에 있는
+      //데이터의 값을 비교하는 반면, toBe는 object의 참조값을 검사함. 결국 새로운 오브젝트가 만들어졌으니 새로운 참조값이죠
+      //그래서 이 테스트를 통해서  이미 0인 값은 절대 새로운 오브젝트를 만들지 않도록 새로운 오브젝트르르 만들어서 안에 데이터의 내용은 변경되지 않는데, 굳이 새로운 오브젝트를 만들어서
+      //굳이 리액트 컴포넌트를 업뎃하지 않도록 이렇게 테스트를 작성해둠
     })
   })
 
